@@ -45,4 +45,50 @@ create table Tutor(
     HireDate date,
     isDeleted tinyint(1) default 0,
     constraint fkTutorUserInfoID foreign key (UserInfoID) references UserInfo(UserInfoID)
-)
+);
+create table Teacher(
+    TeacherID int not null primary key auto_increment,
+    UserInfoID int not null,
+    HireDate date,
+    isDeleted tinyint(1) default 0,
+    constraint fkTeacherUserInfoID foreign key (UserInfoID) references UserInfo(UserInfoID)
+);
+create table Course(
+    CourseID int not null primary key auto_increment,
+    CourseName varchar(30) not null unique,
+    SiteID int not null,
+    TutorID int not null,
+    StartDate date,
+    EndDate date,
+    isDeleted tinyint(1) default 0,
+    constraint fkCourseSiteID foreign key (SiteID) references Site(SiteID),
+    constraint fkCourseTutorID foreign key (TutorID) references Tutor(TutorID)
+);
+create table Module(
+    ModuleID int not null primary key auto_increment,
+    CourseID int not null,
+    TeacherID int not null,
+    SubjectID int not null,
+    ModuleHours int not null,
+    isDeleted tinyint(1) default 0,
+    constraint fkModuleCourseID foreign key (CourseID) references Course(CourseID),
+    constraint fkModuleTeacherID foreign key (TeacherID) references Teacher(TeacherID),
+    constraint fkModuleSubjectID foreign key (SubjectID) references Subject(SubjectID)
+);
+create table Student(
+    StudentID int not null primary key auto_increment,
+    UserInfoID int not null,
+    CourseID int not null,
+    isDeleted tinyint(1) default 0,
+    constraint fkStudentUserInfoID foreign key (UserInfoID) references UserInfo(UserInfoID),
+    constraint fkStudentCourseID foreign key (CourseID) references Course(CourseID)
+);
+create TABLE Grade( 
+    GradeID int not NULL primary key auto_increment,
+    StudentID int not null,
+    ModuleID int not null,
+    Grade decimal(4,2) not null,
+    isDeleted tinyint(1) default 0,
+    constraint fkGradeStudentID foreign key (StudentID) references Student(StudentID),
+    constraint fkGradeModuleID foreign key (ModuleID) references Module(ModuleID)
+);
