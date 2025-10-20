@@ -4,7 +4,7 @@ use DB_Academy;
 
 create table Subject(
     SubjectID int not null primary key auto_increment,
-    SubjectName varchar(20) unique not null,
+    SubjectName varchar(60) unique not null,
     isDeleted tinyint(1) default 0
 );
 create table Province(
