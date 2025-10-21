@@ -55,7 +55,7 @@ create table Teacher(
 );
 create table Course(
     CourseID int not null primary key auto_increment,
-    CourseName varchar(30) not null unique,
+    CourseName varchar(60) not null unique,
     SiteID int not null,
     TutorID int not null,
     StartDate date,
@@ -67,9 +67,9 @@ create table Course(
 create table Module(
     ModuleID int not null primary key auto_increment,
     CourseID int not null,
-    TeacherID int not null,
+    TeacherID int,
     SubjectID int not null,
-    ModuleHours int not null,
+    ModuleHours int ,
     isDeleted tinyint(1) default 0,
     constraint fkModuleCourseID foreign key (CourseID) references Course(CourseID),
     constraint fkModuleTeacherID foreign key (TeacherID) references Teacher(TeacherID),
@@ -78,7 +78,7 @@ create table Module(
 create table Student(
     StudentID int not null primary key auto_increment,
     UserInfoID int not null,
-    CourseID int not null,
+    CourseID int ,
     isDeleted tinyint(1) default 0,
     constraint fkStudentUserInfoID foreign key (UserInfoID) references UserInfo(UserInfoID),
     constraint fkStudentCourseID foreign key (CourseID) references Course(CourseID)
@@ -87,7 +87,7 @@ create TABLE Grade(
     GradeID int not NULL primary key auto_increment,
     StudentID int not null,
     ModuleID int not null,
-    Grade decimal(4,2) not null,
+    Grade decimal(4,2),
     isDeleted tinyint(1) default 0,
     constraint fkGradeStudentID foreign key (StudentID) references Student(StudentID),
     constraint fkGradeModuleID foreign key (ModuleID) references Module(ModuleID)

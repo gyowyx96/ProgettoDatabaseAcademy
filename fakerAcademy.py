@@ -10,7 +10,6 @@ from itertools import count
 
 fake = Faker("it_IT")
 
-N_USERINFOS = 100
 
 # Crea una cartella di output con timestamp
 def ts_outdir(base="csv_out"):
@@ -56,6 +55,8 @@ CORSI_MATERIE = [
             "HTML5, CSS3, JavaScript",
             "Framework front-end (React, Angular)",
             "Sviluppo back-end (Node.js, API REST, Database)",
+            "Data Management e SQL",
+            "Data analysis per sviluppatori",
             "Cloud computing",
             "Intelligenza artificiale applicata al web",
             "Machine Learning e Big Data",
@@ -133,9 +134,12 @@ CORSI_MATERIE = [
         ]
     }
 ]
-N_SITES = 20
+N_SITES = 10
 N_USERINFOS = 200
 N_TUTORS = 5
+N_TEACHERS = 20
+N_COURSES = 10
+N_STUDENTS = 100
 # Genera le materie
 def gen_subjects():
     subjects = []
@@ -205,7 +209,9 @@ def gen_sites(cities):
     return sites
 
 def gen_UserInfos(cities):
-    return [
+    users = []
+    for i in range(N_USERINFOS):
+        users.append(
         {
             "UserInfoID": i + 1,
             "FirstName": fake.first_name(),
@@ -216,9 +222,20 @@ def gen_UserInfos(cities):
             "UserAddress": fake.street_address().replace("\n", ", "),
             "CityID": random.choice(cities)["CityID"],
             "isDeleted": 0
-        }
-        for i in range(N_USERINFOS)
-    ]
+        })
+    # Aggiunta di un utente specifico (u Prof)
+    users.append({ 
+        "UserInfoID": N_USERINFOS + 1, 
+        "FirstName": "Roberto", 
+        "LastName": "Bologna", 
+        "Email":"bobologna@gmfake.com",
+        "PhoneNumber": fake.unique.phone_number(),
+        "BirthDate": fake.date_of_birth(minimum_age=18, maximum_age=65),
+        "UserAddress": fake.street_address().replace("\n", ", "),
+        "CityID": 11,
+        "isDeleted": 0})
+    
+    return users
 
 def gen_tutors(n, userInfos):
     users = random.sample(userInfos, n)
@@ -227,10 +244,135 @@ def gen_tutors(n, userInfos):
             "TutorID": i + 1,
             "UserInfoID": ui["UserInfoID"],
             "HireDate": fake.date_between(start_date='-4y', end_date='-2m'),
-            "isDeleted": None
+            "isDeleted": 0
         }
         for i, ui in enumerate(users)
     ]
+
+def gen_Teachers(n, userInfos):
+    teacher = []
+    users = random.sample(userInfos, n)
+    for i, ui in enumerate(users):
+        teacher.append(
+        {
+            "TeacherID": i + 1,
+            "UserInfoID": ui["UserInfoID"],
+            "HireDate": fake.date_between(start_date='-5y', end_date='-1m'),
+            "isDeleted": 0
+        })
+
+    teacher.append({ "TeacherID": n + 1, "UserInfoID": N_USERINFOS + 1, "HireDate": fake.date_between(start_date='-5y', end_date='-1m'), "isDeleted": 0 })
+    return teacher
+
+def gen_courses(n, sites, tutors):
+    courses = []
+    course_id = count(1)
+    counter = 28
+    for _ in range(n):
+        course_name = f"Corso di {CORSI_MATERIE[random.randint(0, len(CORSI_MATERIE)-1)]['Corso']} {counter}"
+        counter += 1
+        site = random.choice(sites)
+        tutor = random.choice(tutors)
+        start_date = fake.date_between(start_date='-4y', end_date='-3m')
+        end_date = start_date + relativedelta(years=+2)
+
+        # Se il corso non è ancora finito, metti None
+        if end_date > datetime.now().date():
+            end_date = None
+        courses.append({
+            "CourseID": next(course_id),
+            "CourseName": course_name,
+            "SiteID": site["SiteID"],
+            "TutorID": tutor["TutorID"],
+            "StartDate": start_date,
+            "EndDate": end_date,
+            "isDeleted": 0
+        })
+    return courses
+
+def gen_modules(courses, subjects, teachers, modules_per_course=12):
+    modules = []
+    module_id = count(1)
+
+    for course in courses:
+        used_subjects = set()  # tiene traccia delle SubjectID già usate per questo corso
+        used_combos = set()    # combina TeacherID+SubjectID per evitare duplicati
+
+        while len([m for m in modules if m["CourseID"] == course["CourseID"]]) < modules_per_course:
+            subject = random.choice(subjects)
+            teacher = random.choice(teachers)
+
+            # Se la subject è già stata usata nel corso, salta
+            if subject["SubjectID"] in used_subjects:
+                continue
+
+            combo = (teacher["TeacherID"], subject["SubjectID"])
+            if combo in used_combos:
+                continue  # evita duplicati Teacher+Subject nello stesso corso
+
+            used_subjects.add(subject["SubjectID"])
+            used_combos.add(combo)
+
+            modules.append({
+                "ModuleID": next(module_id),
+                "CourseID": course["CourseID"],
+                "TeacherID": teacher["TeacherID"],
+                "SubjectID": subject["SubjectID"],
+                "ModuleHours": random.choice([20, 30, 40, 50, 60, 70, 80, 90, 100]),
+                "isDeleted": 0
+            })
+
+    return modules
+
+
+def gen_students(n, userInfos, courses, teachers, tutors):
+    # Ottieni gli ID utenti già usati da teacher e tutor
+    excluded_ids = {t["UserInfoID"] for t in teachers} | {t["UserInfoID"] for t in tutors}
+    
+    # Filtra userInfos escludendo questi utenti
+    eligible_users = [ui for ui in userInfos if ui["UserInfoID"] not in excluded_ids]
+    
+    # Se n > utenti disponibili, limita per evitare errori
+    n = min(n, len(eligible_users))
+    users = random.sample(eligible_users, n)
+
+    return [
+        {
+            "StudentID": i + 1,
+            "UserInfoID": ui["UserInfoID"],
+            "CourseID": random.choice(courses)["CourseID"],
+            "isDeleted": 0
+        }
+        for i, ui in enumerate(users)
+    ]
+
+def gen_grades(students, modules, courses):
+    grades = []
+    grade_id = count(1)
+
+    # Mappa veloce: CourseID → EndDate
+    course_end_dates = {c["CourseID"]: c["EndDate"] for c in courses}
+    today = datetime.now().date()
+
+    for student in students:
+        student_modules = [m for m in modules if m["CourseID"] == student["CourseID"]]
+        course_end = course_end_dates[student["CourseID"]]
+
+        for module in student_modules:
+            # Se il corso non è ancora finito → voto solo a volte (probabilità bassa)
+            if course_end is None or (course_end > today):
+                grade_value = random.choice([None, None, None, random.randint(4, 10)])  # 75% None
+            else:
+                grade_value = random.randint(4, 10)
+
+            grades.append({
+                "GradeID": next(grade_id),
+                "StudentID": student["StudentID"],
+                "ModuleID": module["ModuleID"],
+                "GradeValue": grade_value,
+                "isDeleted": 0
+            })
+    return grades
 
 # Funzione principale
 def __main__():
@@ -243,6 +385,12 @@ def __main__():
     sites = gen_sites(cities)
     userInfos = gen_UserInfos(cities)
     tutors = gen_tutors(N_TUTORS, userInfos)
+    teachers = gen_Teachers(N_TEACHERS, userInfos)
+
+    courses = gen_courses(N_COURSES, sites, tutors)
+    modules = gen_modules(courses, subjects, teachers)
+    students = gen_students(N_STUDENTS, userInfos, courses, teachers, tutors)
+    grades = gen_grades(students, modules, courses)
 
     write_csv(outdir / "1-provinces.csv", provinces[0].keys(), provinces)
     write_csv(outdir / "2-cities.csv", cities[0].keys(), cities)
@@ -250,6 +398,11 @@ def __main__():
     write_csv(outdir / "4-sites.csv", sites[0].keys(), sites)
     write_csv(outdir / "5-userInfos.csv", userInfos[0].keys(), userInfos)
     write_csv(outdir / "6-tutors.csv", tutors[0].keys(), tutors)
+    write_csv(outdir / "7-teachers.csv", teachers[0].keys(), teachers)
+    write_csv(outdir / "8-courses.csv", courses[0].keys(), courses)
+    write_csv(outdir / "9-modules.csv", modules[0].keys(), modules)
+    write_csv(outdir / "10-students.csv", students[0].keys(), students)
+    write_csv(outdir / "11-grades.csv", grades[0].keys(), grades)
 
     print(f"✅ File salvati in: {outdir.resolve()}")
     
