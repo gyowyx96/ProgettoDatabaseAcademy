@@ -1,0 +1,21 @@
+SiteID,CityID,SiteName,SiteAddress,isDeleted
+1,29,Sede di Termini Imerese,"Contrada Vittadello, 55",0
+2,9,Sede di San Cataldo,"Canale Valentino, 27 Appartamento 12",0
+3,9,Sede di San Cataldo 2,"Piazza Gianluca, 49 Appartamento 3",0
+4,17,Sede di Piazza Armerina,"Via Matilda, 485 Piano 0",0
+5,27,Sede di Bagheria,"Rotonda Giancarlo, 24 Piano 5",0
+6,24,Sede di Patti,"Vicolo Comisso, 495 Piano 4",0
+7,33,Sede di Vittoria,"Strada Salvi, 1",0
+8,12,Sede di Acireale,"Viale Lisa, 49",0
+9,7,Sede di Gela,"Via Panzera, 62 Appartamento 9",0
+10,25,Sede di Taormina,"Via Lupo, 72 Appartamento 81",0
+11,29,Sede di Termini Imerese 2,"Via Rubbia, 84 Appartamento 6",0
+12,45,Sede di Castelvetrano,"Viale Telemaco, 731 Appartamento 79",0
+13,1,Sede di Agrigento,"Viale Quasimodo, 40 Piano 1",0
+14,39,Sede di Lentini,"Via Milena, 55",0
+15,7,Sede di Gela 2,"Viale Marisa, 316 Appartamento 7",0
+16,14,Sede di Adrano,"Rotonda Annibale, 15 Piano 4",0
+17,19,Sede di Nicosia,"Incrocio Patrizia, 5",0
+18,20,Sede di Barrafranca,"Borgo Luca, 198 Piano 4",0
+19,30,Sede di Carini,"Rotonda Carocci, 83",0
+20,41,Sede di Trapani,"Vicolo Leone, 460",0

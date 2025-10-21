@@ -1,0 +1,46 @@
+CityID,ProvinceID,CityName,isDeleted
+1,1,Agrigento,0
+2,1,Canicattì,0
+3,1,Licata,0
+4,1,Favara,0
+5,1,Sciacca,0
+6,2,Caltanissetta,0
+7,2,Gela,0
+8,2,Niscemi,0
+9,2,San Cataldo,0
+10,2,Mazzarino,0
+11,3,Catania,0
+12,3,Acireale,0
+13,3,Paternò,0
+14,3,Adrano,0
+15,3,Misterbianco,0
+16,4,Enna,0
+17,4,Piazza Armerina,0
+18,4,Leonforte,0
+19,4,Nicosia,0
+20,4,Barrafranca,0
+21,5,Messina,0
+22,5,Barcellona Pozzo di Gotto,0
+23,5,Milazzo,0
+24,5,Patti,0
+25,5,Taormina,0
+26,6,Palermo,0
+27,6,Bagheria,0
+28,6,Monreale,0
+29,6,Termini Imerese,0
+30,6,Carini,0
+31,7,Ragusa,0
+32,7,Modica,0
+33,7,Vittoria,0
+34,7,Comiso,0
+35,7,Scicli,0
+36,8,Siracusa,0
+37,8,Augusta,0
+38,8,Noto,0
+39,8,Lentini,0
+40,8,Avola,0
+41,9,Trapani,0
+42,9,Marsala,0
+43,9,Mazara del Vallo,0
+44,9,Alcamo,0
+45,9,Castelvetrano,0

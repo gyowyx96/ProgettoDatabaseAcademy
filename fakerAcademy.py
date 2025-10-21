@@ -134,6 +134,20 @@ CORSI_MATERIE = [
     }
 ]
 N_SITES = 20
+N_USERINFOS = 200
+N_TUTORS = 5
+# Genera le materie
+def gen_subjects():
+    subjects = []
+    subject_id = count(1)
+    for corso in CORSI_MATERIE:
+        for materia in corso["Materie"]:
+            subjects.append({
+                "SubjectID": next(subject_id),
+                "SubjectName": materia,
+                "isDeleted": 0
+            })
+    return subjects
 
 # Genera le province
 def gen_province():
@@ -159,18 +173,64 @@ def gen_cities():
                 "isDeleted": 0
             })
     return cities
-# Genera le materie
-def gen_subjects():
-    subjects = []
-    subject_id = count(1)
-    for corso in CORSI_MATERIE:
-        for materia in corso["Materie"]:
-            subjects.append({
-                "SubjectID": next(subject_id),
-                "SubjectName": materia,
-                "isDeleted": 0
-            })
-    return subjects
+
+def gen_sites(cities):
+    sites = []
+    site_id = count(1)
+    used_names = set()  # tiene traccia dei nomi già usati
+    
+    for _ in range(min(N_SITES, len(cities))):
+        city = random.choice(cities)
+
+        # Nome base
+        base_name = f"Sede di {city['CityName']}"
+        site_name = base_name
+        counter = 2
+        
+        # Se il nome esiste già, aggiungi indice progressivo
+        while site_name in used_names:
+            site_name = f"{base_name} {counter}"
+            counter += 1
+        
+        # Registra il nome usato
+        used_names.add(site_name)
+        
+        sites.append({
+            "SiteID": next(site_id),
+            "CityID": city["CityID"],
+            "SiteName": site_name,
+            "SiteAddress": fake.street_address().replace("\n", ", "),
+            "isDeleted": 0
+        })
+    return sites
+
+def gen_UserInfos(cities):
+    return [
+        {
+            "UserInfoID": i + 1,
+            "FirstName": fake.first_name(),
+            "LastName": fake.last_name(),
+            "Email": fake.unique.email(),
+            "PhoneNumber": fake.unique.phone_number(),
+            "BirthDate": fake.date_of_birth(minimum_age=18, maximum_age=65),
+            "UserAddress": fake.street_address().replace("\n", ", "),
+            "CityID": random.choice(cities)["CityID"],
+            "isDeleted": 0
+        }
+        for i in range(N_USERINFOS)
+    ]
+
+def gen_tutors(n, userInfos):
+    users = random.sample(userInfos, n)
+    return [
+        {
+            "TutorID": i + 1,
+            "UserInfoID": ui["UserInfoID"],
+            "HireDate": fake.date_between(start_date='-4y', end_date='-2m'),
+            "isDeleted": None
+        }
+        for i, ui in enumerate(users)
+    ]
 
 # Funzione principale
 def __main__():
@@ -179,10 +239,18 @@ def __main__():
     provinces = gen_province()
     cities = gen_cities()
     subjects = gen_subjects()
+
+    sites = gen_sites(cities)
+    userInfos = gen_UserInfos(cities)
+    tutors = gen_tutors(N_TUTORS, userInfos)
+
     write_csv(outdir / "1-provinces.csv", provinces[0].keys(), provinces)
     write_csv(outdir / "2-cities.csv", cities[0].keys(), cities)
     write_csv(outdir / "3-subjects.csv", subjects[0].keys(), subjects)
-    
+    write_csv(outdir / "4-sites.csv", sites[0].keys(), sites)
+    write_csv(outdir / "5-userInfos.csv", userInfos[0].keys(), userInfos)
+    write_csv(outdir / "6-tutors.csv", tutors[0].keys(), tutors)
+
     print(f"✅ File salvati in: {outdir.resolve()}")
     
 

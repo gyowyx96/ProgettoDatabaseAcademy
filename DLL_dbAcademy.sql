@@ -22,7 +22,7 @@ create table City(
 create table Site(
     SiteID int not NULL primary key auto_increment,
     CityID int not null,
-    SiteName varchar(25) not null unique,
+    SiteName varchar(50) not null unique,
     SiteAddress varchar(60) not null unique,
     isDeleted tinyint(1) default 0,
     constraint fkSiteCityID foreign key (CityID) references City(CityID)
