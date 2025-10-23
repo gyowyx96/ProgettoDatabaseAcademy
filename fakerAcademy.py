@@ -1,6 +1,7 @@
 # Import delle librerie necessarie
 import csv
 import re
+import hashlib
 from pathlib import Path
 import random
 from datetime import datetime
@@ -211,12 +212,15 @@ def gen_sites(cities):
 def gen_UserInfos(cities):
     users = []
     for i in range(N_USERINFOS):
+        plain = fake.password()
+        hashed = hashlib.sha256(plain.encode('utf-8')).hexdigest()
         users.append(
         {
             "UserInfoID": i + 1,
             "FirstName": fake.first_name(),
             "LastName": fake.last_name(),
             "Email": fake.unique.email(),
+            "PasswordHash": hashed,
             "PhoneNumber": fake.unique.phone_number(),
             "BirthDate": fake.date_of_birth(minimum_age=18, maximum_age=65),
             "UserAddress": fake.street_address().replace("\n", ", "),
@@ -229,6 +233,7 @@ def gen_UserInfos(cities):
         "FirstName": "Roberto", 
         "LastName": "Bologna", 
         "Email":"bobologna@gmfake.com",
+        "PasswordHash": hashlib.sha256(fake.password().encode('utf-8')).hexdigest(),
         "PhoneNumber": fake.unique.phone_number(),
         "BirthDate": fake.date_of_birth(minimum_age=18, maximum_age=65),
         "UserAddress": fake.street_address().replace("\n", ", "),

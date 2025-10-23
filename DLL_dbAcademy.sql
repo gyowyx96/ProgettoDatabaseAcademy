@@ -32,6 +32,7 @@ create TABLE UserInfo(
     FirstName varchar(20) not null,
     LastName varchar(20) not null,
     Email varchar(50) not null unique,
+    PasswordHash VARCHAR(255) NOT NULL,
     PhoneNumber varchar(15) unique,
     BirthDate date,
     UserAddress varchar(60) unique,
