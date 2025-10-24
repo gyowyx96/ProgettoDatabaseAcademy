@@ -56,7 +56,8 @@ create table Teacher(
 );
 create table Course(
     CourseID int not null primary key auto_increment,
-    CourseName varchar(60) not null unique,
+    CourseName varchar(60) not null,
+    CourseNumber int not null unique,
     SiteID int not null,
     TutorID int not null,
     StartDate date,
