@@ -1,0 +1,11 @@
+SiteID,CityID,SiteName,SiteAddress,isDeleted
+1,9,Sede di San Cataldo,"Contrada Danilo, 77",0
+2,37,Sede di Augusta,"Piazza Pellico, 59",0
+3,5,Sede di Sciacca,"Rotonda Amadeo, 40",0
+4,17,Sede di Piazza Armerina,"Stretto Gianfrancesco, 47 Appartamento 17",0
+5,8,Sede di Niscemi,"Via Elisa, 991 Appartamento 84",0
+6,32,Sede di Modica,"Viale Gioachino, 96 Piano 1",0
+7,29,Sede di Termini Imerese,"Via Umberto, 115 Piano 9",0
+8,31,Sede di Ragusa,"Via Tiziano, 0 Piano 8",0
+9,42,Sede di Marsala,"Viale Jacuzzi, 6 Piano 0",0
+10,25,Sede di Taormina,"Vicolo Vismara, 878 Piano 0",0
