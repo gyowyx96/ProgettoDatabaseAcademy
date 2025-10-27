@@ -374,6 +374,8 @@ def gen_grades(students, modules, courses):
             # Se il corso non è ancora finito → voto solo a volte (probabilità bassa)
             if course_end is None or (course_end > today):
                 grade_value = random.choice([None, None, None, random.randint(4, 10)])  # 75% None
+                if grade_value is None:
+                    continue
             else:
                 grade_value = random.randint(4, 10)
 
