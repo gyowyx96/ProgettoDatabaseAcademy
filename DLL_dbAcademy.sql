@@ -94,3 +94,7 @@ create TABLE Grade(
     constraint fkGradeStudentID foreign key (StudentID) references Student(StudentID),
     constraint fkGradeModuleID foreign key (ModuleID) references Module(ModuleID)
 );
+
+CREATE USER 'AccountProva'@'%' IDENTIFIED VIA mysql_native_password USING '***'; 
+GRANT USAGE ON *.* TO 'AccountProva'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0; 
+GRANT SELECT, SHOW VIEW ON `db_academy`.* TO 'AccountProva'@'%';

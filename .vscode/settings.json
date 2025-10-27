@@ -29,50 +29,6 @@
             "database": "db_academy",
             "username": "root",
             "password": ""
-        },
-        {
-            "mysqlOptions": {
-                "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
-            "ssh": "Disabled",
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "AcademyUser",
-            "username": "user_viewer",
-            "database": "db_academy"
-        },
-        {
-            "mysqlOptions": {
-                "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
-            "ssh": "Disabled",
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "userAcademy",
-            "username": "user_viewer",
-            "database": "db_academy",
-            "password": ""
-        },
-        {
-            "mysqlOptions": {
-                "authProtocol": "default",
-                "enableSsl": "Disabled"
-            },
-            "ssh": "Disabled",
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "username": "RobertoBologna",
-            "database": "db_academy",
-            "name": "robertoProva",
-            "password": ""
         }
     ]
 }
