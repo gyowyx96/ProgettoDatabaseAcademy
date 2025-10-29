@@ -43,22 +43,20 @@ ORDER BY CourseName, voto asc;
 
 -- Media delle materie per tutti i corsi
 
-CREATE OR REPLACE VIEW mediamateriacorsi AS
+CREATE or replace view mediamateriacorsi as
 SELECT
-    CONCAT(c.CourseName, ' ', c.CourseNumber, ' ', city.CityName) AS Corso,
+    CONCAT(c.CourseName, ' ', c.CourseNumber, ' ', CityName) AS Corso,
     sub.SubjectName AS Materia,
-    IF(
-        ROUND(AVG(g.Grade), 2) IS NULL, 
-        '---', 
-        ROUND(AVG(g.Grade), 2)
-    ) AS MediaVoti
-FROM subject AS sub
-LEFT JOIN module AS m ON sub.SubjectID = m.SubjectID
-LEFT JOIN grade AS g ON g.ModuleID = m.ModuleID
-LEFT JOIN student AS s ON s.StudentID = g.StudentID
-LEFT JOIN course AS c ON c.CourseID = s.CourseID
-LEFT JOIN site ON site.SiteID = c.SiteID
-LEFT JOIN city ON city.CityID = site.CityID
+    if 
+        (ROUND(AVG(g.Grade), 2) is NULL, "---", ROUND(AVG(g.Grade), 2) ) 
+    AS MediaVoti
+FROM grade AS g
+INNER JOIN module AS m ON g.ModuleID = m.ModuleID
+INNER JOIN subject AS sub ON sub.SubjectID = m.SubjectID
+INNER JOIN student AS s ON s.StudentID = g.StudentID
+INNER JOIN course AS c ON c.CourseID = s.CourseID
+INNER JOIN site ON site.SiteID = c.SiteID
+INNER JOIN city ON city.CityID = site.CityID
 GROUP BY Corso, Materia
 ORDER BY Corso, Materia;
 
